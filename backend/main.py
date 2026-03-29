@@ -1,5 +1,14 @@
-from fastapi import FastAPI
+import os
+
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from groq import Groq
+from pydantic import BaseModel
+
+load_dotenv()
+
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 app = FastAPI()
 
@@ -11,6 +20,22 @@ app.add_middleware(
 )
 
 
+class PromptRequest(BaseModel):
+    prompt: str
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.post("/generate")
+async def generate(request: PromptRequest):
+    if not request.prompt.strip():
+        raise HTTPException(status_code=400, detail="Prompt cannot be empty")
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": request.prompt}],
+    )
+    return {"result": response.choices[0].message.content}
