@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -21,8 +22,14 @@ app.add_middleware(
 )
 
 
+class Message(BaseModel):
+    role: str
+    content: str
+
+
 class PromptRequest(BaseModel):
     prompt: str
+    history: List[Message] = []
 
 
 @app.get("/health")
@@ -35,11 +42,14 @@ async def generate(request: PromptRequest):
     if not request.prompt.strip():
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
 
+    messages = (
+        [{"role": "system", "content": SYSTEM_PROMPT}]
+        + [{"role": m.role, "content": m.content} for m in request.history]
+        + [{"role": "user", "content": request.prompt}]
+    )
+
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": request.prompt},
-        ],
+        messages=messages,
     )
     return {"result": response.choices[0].message.content}

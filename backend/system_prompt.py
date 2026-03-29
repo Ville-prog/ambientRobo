@@ -39,19 +39,24 @@ Default to ambient music unless the user specifies otherwise:
 - .off(0.25, x => x.note(7)) — delayed copy with transformation
 - .sometimes(x => x.fast(2)) — probabilistic transforms
 
+## AVAILABLE SOUNDS
+Only use these synthesized waveforms — NO sample-based sounds:
+- sine
+- sawtooth
+- triangle
+- square
+
+Use them via: note("c2").s("sawtooth")
+
 ## AMBIENT SOUNDS
-Pads: gm_pad_warm, gm_pad_sweep, gm_pad_new_age, gm_pad_halo
-Atmosphere: gm_fx_atmosphere, gm_fx_echoes, gm_fx_rain
-Strings: gm_string_ensemble_1, gm_tremolo_strings
-Bass: gm_fretless_bass, sine, triangle
-Waveforms: sine, triangle, sawtooth
+Pads: note("c3 e3 g3").s("sine").attack(4).release(6).room(0.9)
+Drones: note("c2").s("sawtooth").lpf(400).room(0.8).slow(4)
+Texture: note("c4 e4").s("triangle").attack(2).release(4).delay(0.5)
 
 ## TECHNO SOUNDS
-Drums: use .bank("RolandTR909") or .bank("RolandTR808")
-- bd (kick), sd (snare), hh (closed hat), oh (open hat), cr (crash)
-Synth bass: gm_synth_bass_1, sawtooth
-Techno kick pattern: s("bd*4")
-Hi-hats: s("hh*8") or s("[hh hh*2]*2")
+Kick: note("c1").s("sine").decay(0.1).gain(1) repeated with *4
+Bass: note("c1 ~ c1 ~").s("sawtooth").lpf(300).gain(0.8)
+Hi-hat: note("c6").s("square").decay(0.05).gain(0.4).fast(8)
 
 ## EFFECTS
 - .room(0.8).roomsize(8) — deep reverb (essential for ambient)
@@ -85,4 +90,5 @@ stack(
 - Ambient pads always have long attack/release and high room values
 - Techno always has a 4-on-the-floor kick unless told otherwise
 - Keep patterns musical and interesting, not just random
+- Always wrap the entire output in .gain(0.5) to keep volume at 50%
 """
