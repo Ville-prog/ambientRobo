@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from groq import Groq
 from pydantic import BaseModel
+from system_prompt import SYSTEM_PROMPT
 
 load_dotenv()
 
@@ -36,6 +37,9 @@ async def generate(request: PromptRequest):
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
-        messages=[{"role": "user", "content": request.prompt}],
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": request.prompt},
+        ],
     )
     return {"result": response.choices[0].message.content}
