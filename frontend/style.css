@@ -16,25 +16,13 @@ body {
 }
 
 main {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 640px;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  position: relative;
-  z-index: 1;
-}
-
-/* Strudel's .scope() canvas — centered backdrop behind the UI */
-canvas {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(2);
-  transform-origin: center center;
-  z-index: 0;
-  opacity: 0.8;
-  pointer-events: none;
 }
 
 h1 {
@@ -42,7 +30,17 @@ h1 {
   font-weight: 300;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #71717a;
+  color: #a1a1aa;
+}
+
+#viz {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
 }
 
 form {
@@ -53,7 +51,7 @@ form {
 
 textarea {
   width: 100%;
-  background: rgba(24, 24, 27, 0.5);
+  background: rgba(24, 24, 27, 0.85);
   border: 1px solid #3f3f46;
   border-radius: 4px;
   padding: 1rem;
@@ -75,7 +73,7 @@ textarea::placeholder {
 button {
   align-self: flex-end;
   padding: 0.5rem 1.5rem;
-  background: rgba(39, 39, 42, 0.5);
+  background: rgba(39, 39, 42, 0.85);
   border: none;
   border-radius: 4px;
   color: #a1a1aa;
@@ -101,12 +99,69 @@ button:disabled {
   font-size: 0.85rem;
 }
 
-.status {
-  color: #52525b;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-}
-
 .hidden {
   display: none;
 }
+
+#tuning-panel {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(9, 9, 11, 0.85);
+  border: 1px solid #27272a;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+}
+
+.tuning-toggles {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #27272a;
+}
+
+.tuning-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #52525b;
+  cursor: pointer;
+}
+
+.tuning-toggle input[type=checkbox] {
+  accent-color: #52525b;
+}
+
+.tuning-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tuning-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #52525b;
+  width: 2.8rem;
+}
+
+.tuning-val {
+  font-size: 0.7rem;
+  color: #3f3f46;
+  width: 2rem;
+  text-align: right;
+}
+
+#tuning-panel input[type=range] {
+  accent-color: #52525b;
+  width: 90px;
+}
+

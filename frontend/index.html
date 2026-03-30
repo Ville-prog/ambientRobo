@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <canvas id="viz"></canvas>
   <main>
     <h1>ambientRobo</h1>
 
@@ -20,10 +21,38 @@
     </form>
 
     <p id="error" class="error hidden"></p>
-    <p id="status" class="status hidden"></p>
   </main>
 
+  <div id="tuning-panel">
+    <div class="tuning-toggles">
+      <label class="tuning-toggle">
+        <input type="checkbox" id="viz-toggle" checked>
+        <span>visuals</span>
+      </label>
+      <label class="tuning-toggle">
+        <input type="checkbox" id="tune-toggle">
+        <span>adjust visual</span>
+      </label>
+    </div>
+    <div class="tuning-row">
+      <span class="tuning-label">alpha</span>
+      <input type="range" id="alpha-slider" min="0" max="1" step="0.01" value="0.22">
+      <span class="tuning-val" id="alpha-val">0.22</span>
+    </div>
+    <div class="tuning-row">
+      <span class="tuning-label">width</span>
+      <input type="range" id="width-slider" min="0" max="5" step="0.1" value="1.2">
+      <span class="tuning-val" id="width-val">1.2</span>
+    </div>
+    <div class="tuning-row">
+      <span class="tuning-label">speed</span>
+      <input type="range" id="speed-slider" min="0" max="0.01" step="0.0001" value="0.001">
+      <span class="tuning-val" id="speed-val">0.0010</span>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/@strudel/web@1.0.3"></script>
+  <script src="visualizer.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

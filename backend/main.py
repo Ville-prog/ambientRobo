@@ -1,3 +1,14 @@
+"""
+main.py
+
+FastAPI backend for ambientRobo. Exposes a /generate endpoint that forwards
+user prompts and conversation history to the Groq LLM API and returns Strudel code.
+
+Requires: system_prompt.py (SYSTEM_PROMPT) and API key.
+
+Author: Ville Laaksoaho
+"""
+
 import os
 from typing import List
 
@@ -39,6 +50,18 @@ def health():
 
 @app.post("/generate")
 async def generate(request: PromptRequest):
+    """
+    Generate a Strudel pattern from a user prompt using the Groq LLM API.
+
+    Args:
+        request (PromptRequest): The user prompt and optional conversation history.
+
+    Returns:
+        dict: A dict with a single key ``result`` containing the raw LLM response text.
+
+    Raises:
+        HTTPException: 400 if the prompt is blank.
+    """
     if not request.prompt.strip():
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
 
