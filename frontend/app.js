@@ -28,6 +28,9 @@ function clearStatus() {
 async function initAudio() {
   if (strudelReady) return;
   initStrudel();
+  if (strudel.setTime) {
+    strudel.setTime(() => strudel.getAudioContext().currentTime);
+  }
   strudelReady = true;
 }
 
@@ -41,7 +44,6 @@ form.addEventListener('submit', async (e) => {
   btn.disabled = true;
   btn.textContent = 'generating...';
   clearError();
-  showStatus('generating...');
 
   const newHistory = [...history, { role: 'user', content: prompt }];
 
@@ -55,11 +57,11 @@ form.addEventListener('submit', async (e) => {
     if (!res.ok) throw new Error('Request failed');
 
     const data = await res.json();
-    history = [...newHistory, { role: 'assistant', content: data.result }];
+    const code = data.result.replace(/^```[\w]*\n?/gm, '').replace(/```$/gm, '').trim();
+    history = [...newHistory, { role: 'assistant', content: code }];
     input.value = '';
 
-    evaluate(data.result);
-    showStatus('playing');
+    evaluate(code + '.scope()');
   } catch {
     showError('Something went wrong. Is the backend running?');
     clearStatus();
