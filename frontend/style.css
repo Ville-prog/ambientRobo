@@ -103,6 +103,10 @@ button:disabled {
   display: none;
 }
 
+#tuning-panel.hidden {
+  display: none;
+}
+
 #tuning-panel {
   position: fixed;
   bottom: 1.5rem;

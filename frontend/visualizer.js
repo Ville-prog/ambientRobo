@@ -31,8 +31,8 @@ window.addEventListener('resize', resize);
 resize();
 
 // TUNING PARAMS
-let MAX_ALPHA = 0.15;
-let MAX_WIDTH = 2.5;
+let MAX_ALPHA = 0.21;
+let MAX_WIDTH = 0.0;
 let SPEED = 0.0005;
 
 // Slider sets the ceiling; oscillator drifts each param between its floor and that ceiling.

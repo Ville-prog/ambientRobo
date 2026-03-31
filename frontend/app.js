@@ -34,7 +34,11 @@ function clearError() {
  */
 async function initAudio() {
   if (strudelReady) return;
-  await initStrudel();
+  await initStrudel({
+    prebake: () => fetch('http://localhost:8000/samples-manifest')
+      .then(r => r.json())
+      .then(manifest => samples(manifest))
+  });
   strudelReady = true;
 }
 
@@ -65,16 +69,18 @@ form.addEventListener('submit', async (e) => {
     let code;
 
     if (MOCK) {
-      // test pattern: bass, chords, arp, drums, lead
+      // test pattern: ambient techno using custom samples
       code = `stack(
-  note("<c2 eb2 f2 g2>").s("sawtooth").lpf("<300 600 400 800>").lpq(8).gain(0.7),
-  note("c3 [eb3 g3] bb3 [c4 g3]").s("sine").slow(2).delay(0.4).delayfeedback(0.5).gain(0.35),
-  note("<g4 bb4 c5 eb5>*3").s("triangle").slow(3).gain(0.2).delay(0.2),
-  s("bd ~ [~ bd] ~").gain(0.6),
-  s("~ sd ~ [sd ~]").gain(0.5),
-  s("hh*8").gain(0.15),
-  note("c5 ~ ~ ~ eb5 ~ g5 ~").s("square").lpf(1200).gain(0.12)
-).gain(0.55)`;
+  s("bd*4").n("<0 2 1 0>").gain(0.9),
+  s("~ sd ~ sd").n("<0 3>").gain(0.65),
+  s("hh*8").n("<0 4 2 6>").gain(0.22).pan("<-0.4 0.4>"),
+  s("oh(3,8)").n(0).gain(0.3).room(0.5),
+  s("perc(3,8)").n("<0 2 4>").gain(0.28).room(0.6).pan("<-0.6 0.6>"),
+  s("shaker*2").n(0).gain(0.18).pan(0.3),
+  note("<d1 ~ f1 ~ a1 ~ c2 ~>").s("moog").lpf("<280 400 320>").gain(0.75).slow(2),
+  note("d3 ~ f3 ~ a3 ~ c4 ~").s("sine").attack(2).release(3).room(0.85).gain(0.22),
+  s("vocalChops").n("<0 2 6 8>").slow(4).room(0.9).gain(0.18).pan("<-0.3 0.3>")
+).gain(0.5)`;
 
     } else {
       // Fetch generated Strudel code from the backend
@@ -97,6 +103,7 @@ form.addEventListener('submit', async (e) => {
     // Wrap in .analyze(1) so the Web Audio analyser node is wired into the chain
     const codeWithAnalyser = `(${code}).analyze(1)`;
     console.log('[audio] calling evaluate with:', codeWithAnalyser);
+    document.getElementById('tuning-panel').classList.remove('hidden');
     evaluate(codeWithAnalyser);
     console.log('[audio] evaluate done. strudel keys:', Object.keys(strudel));
 
