@@ -31,28 +31,32 @@ window.addEventListener('resize', resize);
 resize();
 
 // TUNING PARAMS
-let MAX_ALPHA = 0.22;
-let MAX_WIDTH = 1.2;
-let SPEED     = 0.001;
+let MAX_ALPHA = 0.15;
+let MAX_WIDTH = 2.5;
+let SPEED = 0.0005;
 
-// Slider sets the max; oscillator varies between ~55% and 100% of that max.
+// Slider sets the ceiling; oscillator drifts each param between its floor and that ceiling.
+const ALPHA_FLOOR = 0.01;
+const WIDTH_FLOOR = 0.05;
+const SPEED_FLOOR = 0.0001;
 
 let phase = 0;
-let currentAlphaMult = 0;
-let currentWidthMult = 0.2;
+let currentAlphaMult = ALPHA_FLOOR;
+let currentWidthMult = WIDTH_FLOOR;
+let currentSpeed     = SPEED_FLOOR;
 
 /**
- * @brief Advances the oscillator phase and updates the current alpha and width multipliers.
+ * @brief Advances the oscillator phase and updates all current rendering params.
  *
- * Blends two incommensurable sine waves to produce organic, non-repeating drift.
- * Results are written to the module-level currentAlphaMult and currentWidthMult.
+ * Blends two incommensurable sine waves for organic, non-repeating drift.
+ * Each param sweeps between its floor constant and its slider max.
  */
 function tickOscillator() {
-
-  phase += 0.00012;
+  phase += 0.00004;
   const t = ((Math.sin(phase) + Math.sin(phase * 0.37 + 1.3)) / 2 + 1) / 2;
-  currentAlphaMult = MAX_ALPHA * (0.55 + t * 0.45);
-  currentWidthMult = MAX_WIDTH * (1 - t * 0.58);
+  currentAlphaMult = ALPHA_FLOOR + t * (MAX_ALPHA - ALPHA_FLOOR);
+  currentWidthMult = WIDTH_FLOOR + t * (MAX_WIDTH - WIDTH_FLOOR);
+  currentSpeed     = SPEED_FLOOR + t * (SPEED     - SPEED_FLOOR);
 }
 
 // AUDIO HELPERS
@@ -124,7 +128,7 @@ class FlowFieldEffect {
    * @param {{ low: number, mid: number, high: number }} bands Normalised bass, mid, and treble energies.
    */
   render(amp, bands) {
-    this.#time += SPEED + amp * SPEED * 30 + bands.low * SPEED * 15;
+    this.#time += currentSpeed + amp * currentSpeed * 30 + bands.low * currentSpeed * 15;
 
     const target = bands.low * 14 + bands.mid * 7 + bands.high * 2;
     this.#radius += (target - this.#radius) * 0.22;
@@ -242,6 +246,16 @@ function bindSlider(id, valId, decimals, onValue) {
     onValue(v);
   });
 }
+
+// Initialise slider positions and labels from the JS constants
+function initSlider(id, valId, value, decimals) {
+  document.getElementById(id).value = value;
+  document.getElementById(valId).textContent = value.toFixed(decimals);
+}
+
+initSlider('alpha-slider', 'alpha-val', MAX_ALPHA, 2);
+initSlider('width-slider', 'width-val', MAX_WIDTH, 1);
+initSlider('speed-slider', 'speed-val', SPEED,     4);
 
 bindSlider('alpha-slider', 'alpha-val', 2,  v => MAX_ALPHA = v);
 bindSlider('width-slider', 'width-val', 1,  v => MAX_WIDTH = v);
