@@ -13,8 +13,9 @@ import os
 from typing import List
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from groq import Groq, RateLimitError
 from pydantic import BaseModel
@@ -28,19 +29,26 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 SAMPLES_DIR = "samples"
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".ogg", ".flac"}
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
 
 app.mount("/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
 
 
+@app.get("/")
+def index():
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+
+
 @app.get("/samples-manifest")
-def samples_manifest():
+def samples_manifest(request: Request):
+    base_url = str(request.base_url).rstrip("/")
     manifest = {}
 
     for entry in sorted(os.listdir(SAMPLES_DIR)):
@@ -51,7 +59,7 @@ def samples_manifest():
 
         # Check if entry contains audio files directly (e.g. vocalChops)
         direct_files = sorted(
-            f"http://localhost:8000/samples/{entry}/{f}"
+            f"{base_url}/samples/{entry}/{f}"
             for f in os.listdir(entry_path)
             if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS
         )
@@ -66,7 +74,7 @@ def samples_manifest():
                 continue
 
             files = sorted(
-                f"http://localhost:8000/samples/{entry}/{folder}/{f}"
+                f"{base_url}/samples/{entry}/{folder}/{f}"
                 for f in os.listdir(folder_path)
                 if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS
             )
@@ -124,3 +132,6 @@ async def generate(request: PromptRequest):
         raise HTTPException(status_code=429, detail="Rate limit reached")
 
     return {"result": response.choices[0].message.content}
+
+
+app.mount("/", StaticFiles(directory=FRONTEND_DIR), name="frontend")

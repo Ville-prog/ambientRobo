@@ -37,7 +37,7 @@ function clearError() {
 async function initAudio() {
   if (strudelReady) return;
   await initStrudel({
-    prebake: () => fetch('http://localhost:8000/samples-manifest')
+    prebake: () => fetch('/samples-manifest')
       .then(r => r.json())
       .then(manifest => samples(manifest))
   });
@@ -68,7 +68,7 @@ form.addEventListener('submit', async (e) => {
   const newHistory = [...history, { role: 'user', content: prompt }];
 
   try {
-    const res = await fetch('http://localhost:8000/generate', {
+    const res = await fetch('/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt, history }),

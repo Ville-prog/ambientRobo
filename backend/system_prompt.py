@@ -156,4 +156,6 @@ stack(
 - Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
 - High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
 - Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
+- For the FIRST pattern in a conversation (no prior history), keep it simple: 2–3 layers maximum, no more than one rhythmic element, focus on a single mood or texture
+- NEVER layer a kick drum (bd) and an amenBreak simultaneously — they will clash in the low end. Choose one or the other per pattern
 """
