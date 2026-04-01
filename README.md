@@ -11,3 +11,5 @@ User prompts are sent to [Groq](https://groq.com/), a cloud inference service ru
 Strudel documentation and prompt examples adapted from [strudel-llm-docs](https://github.com/calvinw/strudel-llm-docs) by calvinw, licensed under MIT.
 
 Flow field and particle curve visualizers adapted from [Frank's Laboratory](https://codepen.io/franksLaboratory) on CodePen.
+
+Audio samples sourced from [Dough-Amen](https://github.com/Bubobubobubobubo/Dough-Amen) and [Dough-Juj](https://github.com/Bubobubobubobubo/Dough-Juj) by Bubobubobubobubo, and [Dirt-Samples](https://github.com/tidalcycles/Dirt-Samples) by the TidalCycles project.

@@ -62,18 +62,6 @@ function tickOscillator() {
 // AUDIO HELPERS
 
 /**
- * @brief Computes the root mean square of a float audio buffer.
- *
- * @param {Float32Array} buf Time-domain audio samples in the range [-1, 1].
- * @returns {number} RMS amplitude value in the range [0, 1].
- */
-function getRMS(buf) {
-  let sum = 0;
-  for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
-  return Math.sqrt(sum / buf.length);
-}
-
-/**
  * @brief Reads frequency bin data from an AnalyserNode and returns normalised band energies.
  *
  * @param {AnalyserNode} node Web Audio AnalyserNode to read from.

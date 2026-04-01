@@ -43,3 +43,16 @@ jobs:
           test -f frontend/index.html
           test -f frontend/app.js
           test -f frontend/style.css
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test

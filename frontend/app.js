@@ -93,7 +93,7 @@ form.addEventListener('submit', async (e) => {
       const data = await res.json();
 
       // Strip any markdown code fences the model may have wrapped around the code
-      code = data.result.replace(/^```[\w]*\n?/gm, '').replace(/```$/gm, '').trim();
+      code = stripFences(data.result);
     }
 
     // Commit the LLM reply to history and clear the input
