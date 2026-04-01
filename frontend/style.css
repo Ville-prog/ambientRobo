@@ -194,8 +194,6 @@ button:disabled {
   border: 1px solid #27272a;
   border-radius: 2px;
   padding: 0.5rem;
-  max-height: 120px;
-  overflow-y: auto;
 }
 
 #tab-about {

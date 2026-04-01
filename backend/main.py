@@ -115,7 +115,7 @@ async def generate(request: PromptRequest):
     if not request.prompt.strip():
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
 
-    history = request.history[-6:]  # keep last 3 exchanges (6 messages)
+    history = request.history[-4:]  # keep last 2 exchanges (4 messages)
 
     messages = (
         [{"role": "system", "content": SYSTEM_PROMPT}]
