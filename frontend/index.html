@@ -23,6 +23,24 @@
     <p id="error" class="error hidden"></p>
   </main>
 
+  <button id="info-btn">i</button>
+
+  <div id="info-panel" class="hidden">
+    <div id="info-tabs">
+      <button class="tab-btn active" data-tab="history">history</button>
+      <button class="tab-btn" data-tab="about">about</button>
+    </div>
+    <div id="tab-history" class="tab-content">
+      <div id="history-list"></div>
+    </div>
+    <div id="tab-about" class="tab-content hidden">
+      <p>ambientRobo is an AI-powered ambient and techno pattern generator.</p>
+      <p>Describe a sound in plain text and the app generates and plays it live in the browser using <a href="https://strudel.cc/" target="_blank">Strudel</a>, a JavaScript live coding language for music.</p>
+      <p>Powered by <a href="https://groq.com/" target="_blank">Groq</a> running Llama 3.3 70B.</p>
+      <p>Made by Ville Laaksoaho. Open source under the MIT License.</p>
+    </div>
+  </div>
+
   <div id="tuning-panel" class="hidden">
     <div class="tuning-toggles">
       <label class="tuning-toggle">

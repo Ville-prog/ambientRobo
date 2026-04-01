@@ -108,6 +108,7 @@ form.addEventListener('submit', async (e) => {
     console.log('[audio] evaluate done. strudel keys:', Object.keys(strudel));
 
     startAudioLogging(); // activates the visualizer (defined in visualizer.js)
+    addHistoryEntry(prompt, code);
 
   } catch (err) {
     console.error('[audio] error:', err);
@@ -118,3 +119,31 @@ form.addEventListener('submit', async (e) => {
     btn.textContent = 'generate';
   }
 });
+
+// INFO PANEL
+const infoBtn   = document.getElementById('info-btn');
+const infoPanel = document.getElementById('info-panel');
+
+infoBtn.addEventListener('click', () => {
+  infoPanel.classList.toggle('hidden');
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+  });
+});
+
+function addHistoryEntry(prompt, code) {
+  const list = document.getElementById('history-list');
+  const entry = document.createElement('div');
+  entry.className = 'history-entry';
+  entry.innerHTML = `
+    <div class="history-prompt">${prompt}</div>
+    <pre class="history-code">${code}</pre>
+  `;
+  list.prepend(entry);
+}

@@ -14,6 +14,32 @@ Default to ambient music unless the user specifies otherwise:
 - Minor, pentatonic, or dorian scales
 - Slow tempos or no explicit tempo
 
+## REFERENCE ARTISTS
+Ambient: Brian Eno, William Basinski, Aphex Twin, Hotel Neon, Dean Blunt, Yves Tumor
+Techno: Aphex Twin, Burial, Underworld, Mall Grab, Enko, DJ Arne
+
+## AMBIENT MUSIC THEORY
+Ambient compositions often lack a clear melody, rhythm, or conventional structure. They evoke emotions, moods, and a sense of space through carefully crafted layers of sound.
+
+Texture and Timbre: Explore unique timbres through synthesizers and sound manipulation. Use layered waveforms, filtered noise, and modulated tones to build atmosphere.
+
+Drones and Sustained Tones: Sustained tones form the foundation. Create them with slow-attack sine/sawtooth oscillators or pitched samples held with long release.
+
+Layering and Depth: Each layer contributes to overall depth. Stack sparse elements — a drone, a slow arpeggio, distant percussion — each occupying its own frequency and spatial space.
+
+Subtle Movement and Evolution: Avoid static textures. Use slow modulation (.fm()), alternating patterns (<>), and probabilistic transforms (.sometimes()) to introduce gradual change.
+
+Non-Traditional Structure: No verse-chorus. Focus on continuous, evolving sonic environments where elements fade in and out organically.
+
+Emotional and Spatial Qualities: Deep reverb (.room()), stereo spread (.pan(), .jux()), and slow filter sweeps (.lpf()) define the sense of space and mood.
+
+Sound Layering Techniques:
+- Additive: combine sine waves at different pitches for evolving harmonic drones
+- Subtractive: start with sawtooth/square, shape with .lpf() and .lpq() for atmospheric pads
+- Modulation: automate filter cutoff, pitch, and amplitude over time for movement
+- Feedback/Delay: use .delay() with long delaytime for self-sustaining echo textures
+- Convolution: use high .room() and .roomsize() values to simulate large, reverberant spaces
+
 ## MINI-NOTATION
 - space separates steps: "bd sd hh"
 - ~ or - is a rest: "bd ~ sd ~"
@@ -66,8 +92,8 @@ Melodic/bass samples (pitched — use note() with s() to pitch-shift):
   e.g. note("c2 ~ g1 ~").s("moog").lpf(600).room(0.5)
 
 Vocal chops (French phoneme syllables, great for glitchy/ambient texture):
-- vocalChops — 9 chops: A(0), AIENT(1), AN(2), AR(3), AU(4), TAIT(5), TI(6), UN(7), VER(8)
-  e.g. s("vocalChops").n("<0 2 6 8>").slow(2).room(0.8).gain(0.5)
+- vocalChops — 25 chops (n 0–24): A(0), AIENT(1), AN(2), AR(3), AU(4), MOU(5), OU(6), PA(7), PEU(8), PLU(9), PO(10), PRÉ(11), RY(12), S(13), SION(14), TAIT(15), TE(16), TES(17), TI(18), TOT(19), TRAN(20), TU(21), TUR(22), UN(23), VER(24)
+  e.g. s("vocalChops").n("<0 2 6 18>").slow(2).room(0.8).gain(0.5)
 
 Select variations with .n() — e.g. s("bd").n(2) or s("sd").n("<0 3 5>")
 

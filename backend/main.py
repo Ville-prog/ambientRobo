@@ -42,10 +42,13 @@ app.mount("/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
 @app.get("/samples-manifest")
 def samples_manifest():
     manifest = {}
+
     for entry in sorted(os.listdir(SAMPLES_DIR)):
         entry_path = os.path.join(SAMPLES_DIR, entry)
+
         if not os.path.isdir(entry_path):
             continue
+
         # Check if entry contains audio files directly (e.g. vocalChops)
         direct_files = sorted(
             f"http://localhost:8000/samples/{entry}/{f}"
@@ -55,11 +58,13 @@ def samples_manifest():
         if direct_files:
             manifest[entry] = direct_files
             continue
+
         # Otherwise walk one level deeper (e.g. drums/bd, drums/hh)
         for folder in sorted(os.listdir(entry_path)):
             folder_path = os.path.join(entry_path, folder)
             if not os.path.isdir(folder_path):
                 continue
+                
             files = sorted(
                 f"http://localhost:8000/samples/{entry}/{folder}/{f}"
                 for f in os.listdir(folder_path)
