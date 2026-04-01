@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from groq import Groq
+from groq import Groq, RateLimitError
 from pydantic import BaseModel
 from system_prompt import SYSTEM_PROMPT
 
@@ -64,7 +64,7 @@ def samples_manifest():
             folder_path = os.path.join(entry_path, folder)
             if not os.path.isdir(folder_path):
                 continue
-                
+
             files = sorted(
                 f"http://localhost:8000/samples/{entry}/{folder}/{f}"
                 for f in os.listdir(folder_path)
@@ -107,14 +107,20 @@ async def generate(request: PromptRequest):
     if not request.prompt.strip():
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
 
+    history = request.history[-6:]  # keep last 3 exchanges (6 messages)
+
     messages = (
         [{"role": "system", "content": SYSTEM_PROMPT}]
-        + [{"role": m.role, "content": m.content} for m in request.history]
+        + [{"role": m.role, "content": m.content} for m in history]
         + [{"role": "user", "content": request.prompt}]
     )
 
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=messages,
-    )
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=messages,
+        )
+    except RateLimitError:
+        raise HTTPException(status_code=429, detail="Rate limit reached")
+
     return {"result": response.choices[0].message.content}

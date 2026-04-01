@@ -2,15 +2,12 @@
  * app.js
  *
  * Handles prompt submission, Groq API communication, and Strudel pattern evaluation for ambientRobo.
- * Submits user prompts to the backend (or a mock pattern), evaluates the returned Strudel code,
- * and activates the visualizer.
+ * Submits user prompts to the backend, evaluates the returned Strudel code, and activates the visualizer.
  *
  * Requires: visualizer.js (startAudioLogging), @strudel/web global (initStrudel, evaluate, strudel).
  *
  * @author Ville Laaksoaho
  */
-
-const MOCK = true; // set to true to skip Groq API and use a test pattern
 
 const form = document.getElementById('prompt-form');
 const input = document.getElementById('prompt-input');
@@ -22,6 +19,11 @@ let history = [];
 
 function showError(msg) {
   errorEl.textContent = msg;
+  errorEl.classList.remove('hidden');
+}
+
+function showErrorHTML(html) {
+  errorEl.innerHTML = html;
   errorEl.classList.remove('hidden');
 }
 
@@ -66,35 +68,17 @@ form.addEventListener('submit', async (e) => {
   const newHistory = [...history, { role: 'user', content: prompt }];
 
   try {
-    let code;
+    const res = await fetch('http://localhost:8000/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, history }),
+    });
+    if (res.status === 429) throw new Error('rate_limit');
+    if (!res.ok) throw new Error('Request failed');
+    const data = await res.json();
 
-    if (MOCK) {
-      // test pattern: ambient techno using custom samples
-      code = `stack(
-  s("bd*4").n("<0 2 1 0>").gain(0.9),
-  s("~ sd ~ sd").n("<0 3>").gain(0.65),
-  s("hh*8").n("<0 4 2 6>").gain(0.22).pan("<-0.4 0.4>"),
-  s("oh(3,8)").n(0).gain(0.3).room(0.5),
-  s("perc(3,8)").n("<0 2 4>").gain(0.28).room(0.6).pan("<-0.6 0.6>"),
-  s("shaker*2").n(0).gain(0.18).pan(0.3),
-  note("<d1 ~ f1 ~ a1 ~ c2 ~>").s("moog").lpf("<280 400 320>").gain(0.75).slow(2),
-  note("d3 ~ f3 ~ a3 ~ c4 ~").s("sine").attack(2).release(3).room(0.85).gain(0.22),
-  s("vocalChops").n("<0 2 6 8>").slow(4).room(0.9).gain(0.18).pan("<-0.3 0.3>")
-).gain(0.5)`;
-
-    } else {
-      // Fetch generated Strudel code from the backend
-      const res = await fetch('http://localhost:8000/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, history }),
-      });
-      if (!res.ok) throw new Error('Request failed');
-      const data = await res.json();
-
-      // Strip any markdown code fences the model may have wrapped around the code
-      code = stripFences(data.result);
-    }
+    // Strip any markdown code fences the model may have wrapped around the code
+    const code = stripFences(data.result);
 
     // Commit the LLM reply to history and clear the input
     history = [...newHistory, { role: 'assistant', content: code }];
@@ -102,17 +86,19 @@ form.addEventListener('submit', async (e) => {
 
     // Wrap in .analyze(1) so the Web Audio analyser node is wired into the chain
     const codeWithAnalyser = `(${code}).analyze(1)`;
-    console.log('[audio] calling evaluate with:', codeWithAnalyser);
     document.getElementById('tuning-panel').classList.remove('hidden');
     evaluate(codeWithAnalyser);
-    console.log('[audio] evaluate done. strudel keys:', Object.keys(strudel));
 
     startAudioLogging(); // activates the visualizer (defined in visualizer.js)
     addHistoryEntry(prompt, code);
 
   } catch (err) {
     console.error('[audio] error:', err);
-    showError('Something went wrong. Is the backend running?');
+    if (err.message === 'rate_limit') {
+      showErrorHTML('ambientRobo is a small demo and has hit its limit for now. Come back later, or <a href="https://github.com/Ville-prog" target="_blank">reach out to me</a> to explore it further.');
+    } else {
+      showError('Something went wrong. Is the backend running?');
+    }
     
   } finally {
     btn.disabled = false;

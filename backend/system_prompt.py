@@ -15,7 +15,7 @@ Default to ambient music unless the user specifies otherwise:
 - Slow tempos or no explicit tempo
 
 ## REFERENCE ARTISTS
-Ambient: Brian Eno, William Basinski, Aphex Twin, Hotel Neon, Dean Blunt, Yves Tumor
+Ambient: Brian Eno, William Basinski, Aphex Twin, Hotel Neon
 Techno: Aphex Twin, Burial, Underworld, Mall Grab, Enko, DJ Arne
 
 ## AMBIENT MUSIC THEORY
@@ -53,8 +53,8 @@ Sound Layering Techniques:
 
 ## CORE FUNCTIONS
 - sound() / s() — play a sample
-- note("c3 e3 g3") — play notes by letter; DO NOT combine with .scale()
-- n("0 2 4").scale("E:minor") — play scale degrees as numbers; ALWAYS use n() not note() with .scale()
+- note("c3 e3 g3") — play notes by letter; NEVER combine with .scale()
+- n("0 2 4").scale("E:minor") — scale degrees MUST use n(), not note(). note("0 2 4").scale("E:minor") is ALWAYS a bug.
 - stack() — layer patterns in parallel
 - chord("<C Am F G>").voicing() — chord progressions
 
@@ -93,7 +93,8 @@ Melodic/bass samples (pitched — use note() with s() to pitch-shift):
 
 Vocal chops (French phoneme syllables, great for glitchy/ambient texture):
 - vocalChops — 25 chops (n 0–24): A(0), AIENT(1), AN(2), AR(3), AU(4), MOU(5), OU(6), PA(7), PEU(8), PLU(9), PO(10), PRÉ(11), RY(12), S(13), SION(14), TAIT(15), TE(16), TES(17), TI(18), TOT(19), TRAN(20), TU(21), TUR(22), UN(23), VER(24)
-  e.g. s("vocalChops").n("<0 2 6 18>").slow(2).room(0.8).gain(0.5)
+  Use sparingly — a subtle background element, not a lead. Low gain (0.1–0.25), high room, slow pattern.
+  e.g. s("vocalChops").n("<0 ~ ~ 6 ~ ~ 18 ~>").slow(4).room(0.9).gain(0.15)
 
 Select variations with .n() — e.g. s("bd").n(2) or s("sd").n("<0 3 5>")
 
@@ -120,9 +121,9 @@ Amen break: s("amenBreaks").n(2).loopAt(2).gain(0.7)
 - .delay(0.5).delaytime(0.25) — delay
 - .shape(0.3) — soft distortion
 - .gain(0.8) — volume
-- .pan(0.3) — stereo position, MUST be between -1 and 1
+- .pan(v) — stereo position. v MUST be in range -0.9 to 0.9. ANY value outside this range is a bug. Valid: .pan(0.5) .pan(-0.7). Invalid: .pan(1.3) .pan(-1.8)
 - .attack(4).release(4) — slow envelope (ambient pads)
-- .duck() — sidechain compression feel (techno)
+- .squiz(2) — sidechain compression feel (techno); do NOT use .duck() — it does not exist
 - .fm(3) — frequency modulation for movement
 - .crush(4) — bitcrusher
 
@@ -134,9 +135,9 @@ Format: "root:type"
 ## STRUCTURE
 Use stack() to layer multiple patterns:
 stack(
-  note("0 2 4 6").scale("E:minor").s("sine").attack(4).release(4).room(0.8),
+  n("0 2 4 6").scale("E:minor").s("sine").attack(4).release(4).room(0.8),
   s("bd*4").gain(0.9),
-  note("0 ~ 4 ~").scale("E:minor").s("sawtooth").lpf(400).slow(2)
+  n("0 ~ 4 ~").scale("E:minor").s("sawtooth").lpf(400).slow(2)
 )
 
 ## RULES
@@ -150,4 +151,9 @@ stack(
 - ONLY use sample names listed under "Custom sample banks" — never reference 808bd, arpy, rave, moog, birds, bass0–3, or any other Dirt-Samples not in that list
 - Use .n() to vary sample variations and keep patterns from sounding static
 - amenBreaks must always use .loopAt() to sync to the current tempo
+- NEVER use note() with .scale() — this causes a runtime error. Always use n() with .scale()
+- Use moog samples often for melodic and textural elements, but synthesized waveforms (sine, sawtooth, triangle) are still encouraged alongside them
+- Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
+- High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
+- Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
 """
