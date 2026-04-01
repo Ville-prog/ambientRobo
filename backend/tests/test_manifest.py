@@ -22,12 +22,12 @@ def test_manifest_values_are_lists_of_strings():
             assert isinstance(item, str), f"{key} contains non-string item: {item!r}"
 
 
-def test_manifest_urls_contain_localhost():
+def test_manifest_urls_contain_samples_path():
     data = client.get("/samples-manifest").json()
     for key, urls in data.items():
         for url in urls:
-            assert "localhost:8000/samples" in url, (
-                f"URL for {key} does not contain 'localhost:8000/samples': {url!r}"
+            assert "/samples/" in url, (
+                f"URL for {key} does not contain '/samples/': {url!r}"
             )
 
 
