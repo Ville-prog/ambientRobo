@@ -10,6 +10,7 @@ Author: Ville Laaksoaho
 """
 
 import os
+import re
 from typing import List
 
 from dotenv import load_dotenv
@@ -36,6 +37,11 @@ app.add_middleware(
 SAMPLES_DIR = "samples"
 AUDIO_EXTENSIONS = {".mp3"}
 
+
+def _natural_key(s: str) -> list:
+    """Sort key that orders strings with embedded numbers numerically."""
+    return [int(c) if c.isdigit() else c.lower() for c in re.split(r"(\d+)", s)]
+
 app.mount("/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
 
 
@@ -52,9 +58,10 @@ def samples_manifest(request: Request):
 
         # Check if entry contains audio files directly (e.g. vocal)
         direct_files = sorted(
-            f"{base_url}/samples/{entry}/{f}"
-            for f in os.listdir(entry_path)
-            if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS
+            (f"{base_url}/samples/{entry}/{f}"
+             for f in os.listdir(entry_path)
+             if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS),
+            key=_natural_key
         )
         if direct_files:
             manifest[entry] = direct_files
@@ -67,9 +74,10 @@ def samples_manifest(request: Request):
                 continue
 
             files = sorted(
-                f"{base_url}/samples/{entry}/{folder}/{f}"
-                for f in os.listdir(folder_path)
-                if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS
+                (f"{base_url}/samples/{entry}/{folder}/{f}"
+                 for f in os.listdir(folder_path)
+                 if os.path.splitext(f)[1].lower() in AUDIO_EXTENSIONS),
+                key=_natural_key
             )
             if files:
                 manifest[folder] = files

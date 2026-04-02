@@ -71,11 +71,11 @@ Synthesized waveforms (use via note().s()):
 
 Custom sample banks (use via s() — ONLY use these, no other sample names):
 - bd        — 11 kicks (n 0–10)
-- sd        — 36 snares (n 0–35)
+- sd        — 26 snares (n 0–25)
 - hh        — 9 closed hi-hats (n 0–8)
 - oh        — 2 open hi-hats (n 0–1)
 - cp        — 1 clap (n 0)
-- perc      — 32 percussion hits (n 0–31)
+- perc      — 31 percussion hits (n 0–30)
 - bongo     — 5 bongo hits (n 0–4)
 - clave     — 4 clave hits (n 0–3)
 - cowbell   — 2 cowbell hits (n 0–1)
@@ -89,17 +89,17 @@ Custom sample banks (use via s() — ONLY use these, no other sample names):
 - amenBreaks — 19 amen break loops (n 0–18); use .loopAt(1) or .loopAt(2) to sync to tempo
 
 Melodic/bass samples (pitched — use note() with s() to pitch-shift):
-- moog   — 7 Moog bass samples; base pitches: n(0)=C2, n(1)=C3, n(2)=C4, n(3)=G1, n(4)=G2, n(5)=G3, n(6)=G4
+- moog   — 5 Moog bass samples (n 0–4); use note() to pitch-shift
   e.g. note("c2 ~ g1 ~").s("moog").lpf(600).room(0.5)
-- bass   — 24 bass samples (n 0–23); use note() to pitch-shift
+- bass   — 22 bass samples (n 0–21); use note() to pitch-shift
   e.g. note("c1 ~ g1 ~").s("bass").lpf(300).gain(0.7)
-- pad    — 15 pad samples (n 0–14); long atmospheric textures, use with slow attack/release
-  e.g. s("pad").n("<0 3 7>").slow(2).room(0.9).gain(0.4)
-- synths — 31 synth samples (n 0–30); melodic and textural
+- pad    — 7 pad samples (n 0–6); long atmospheric textures, use with slow attack/release
+  e.g. s("pad").n("<0 3 6>").slow(2).room(0.9).gain(0.4)
+- synths — 22 synth samples (n 0–21); melodic and textural
   e.g. note("e3 g3 b3").s("synths").n("<0 5 12>").room(0.7).gain(0.4)
 
 Vocal samples (great for glitchy/ambient texture):
-- vocal — 35 chops (n 0–34); mix of French phoneme syllables and vocal textures
+- vocal — 32 chops (n 0–31); mix of French phoneme syllables and vocal textures
   Use sparingly — a subtle background element, not a lead. Low gain (0.1–0.25), high room, slow pattern.
   e.g. s("vocal").n("<0 ~ ~ 6 ~ ~ 18 ~>").slow(4).room(0.9).gain(0.15)
 
