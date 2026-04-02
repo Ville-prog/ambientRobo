@@ -34,7 +34,7 @@ app.add_middleware(
 )
 
 SAMPLES_DIR = "samples"
-AUDIO_EXTENSIONS = {".wav", ".mp3", ".ogg", ".flac"}
+AUDIO_EXTENSIONS = {".mp3"}
 
 app.mount("/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
 
