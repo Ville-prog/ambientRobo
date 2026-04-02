@@ -15,7 +15,6 @@ from typing import List
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from groq import Groq, RateLimitError
 from pydantic import BaseModel
@@ -36,14 +35,8 @@ app.add_middleware(
 
 SAMPLES_DIR = "samples"
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".ogg", ".flac"}
-FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
 
 app.mount("/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
-
-
-@app.get("/")
-def index():
-    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
 
 @app.get("/samples-manifest")
@@ -57,7 +50,7 @@ def samples_manifest(request: Request):
         if not os.path.isdir(entry_path):
             continue
 
-        # Check if entry contains audio files directly (e.g. vocalChops)
+        # Check if entry contains audio files directly (e.g. vocal)
         direct_files = sorted(
             f"{base_url}/samples/{entry}/{f}"
             for f in os.listdir(entry_path)
@@ -132,6 +125,3 @@ async def generate(request: PromptRequest):
         raise HTTPException(status_code=429, detail="Rate limit reached")
 
     return {"result": response.choices[0].message.content}
-
-
-app.mount("/", StaticFiles(directory=FRONTEND_DIR), name="frontend")
