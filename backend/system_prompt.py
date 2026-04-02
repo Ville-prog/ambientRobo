@@ -71,13 +71,14 @@ Synthesized waveforms (use via note().s()):
 
 Custom sample banks (use via s() — ONLY use these, no other sample names):
 - bd        — 11 kicks (n 0–10)
-- sd        — 9 snares (n 0–8)
+- sd        — 36 snares (n 0–35)
 - hh        — 9 closed hi-hats (n 0–8)
 - oh        — 2 open hi-hats (n 0–1)
 - cp        — 8 claps (n 0–7)
-- perc      — 5 percussion hits (n 0–4)
+- perc      — 24 percussion hits (n 0–23)
 - bongo     — 5 bongo hits (n 0–4)
 - clave     — 4 clave hits (n 0–3)
+- cowbell   — 2 cowbell hits (n 0–1)
 - rim       — 2 rimshots (n 0–1)
 - stick     — 2 stick hits (n 0–1)
 - shaker    — 2 shaker hits (n 0–1)
@@ -88,22 +89,31 @@ Custom sample banks (use via s() — ONLY use these, no other sample names):
 - amenBreaks — 19 amen break loops (n 0–18); use .loopAt(1) or .loopAt(2) to sync to tempo
 
 Melodic/bass samples (pitched — use note() with s() to pitch-shift):
-- moog — 7 Moog bass samples; base pitches: n(0)=C2, n(1)=C3, n(2)=C4, n(3)=G1, n(4)=G2, n(5)=G3, n(6)=G4
+- moog   — 7 Moog bass samples; base pitches: n(0)=C2, n(1)=C3, n(2)=C4, n(3)=G1, n(4)=G2, n(5)=G3, n(6)=G4
   e.g. note("c2 ~ g1 ~").s("moog").lpf(600).room(0.5)
+- bass   — 21 bass samples (n 0–20); use note() to pitch-shift
+  e.g. note("c1 ~ g1 ~").s("bass").lpf(300).gain(0.7)
+- pad    — 10 pad samples (n 0–9); long atmospheric textures, use with slow attack/release
+  e.g. s("pad").n("<0 3 7>").slow(2).room(0.9).gain(0.4)
+- synths — 31 synth samples (n 0–30); melodic and textural
+  e.g. note("e3 g3 b3").s("synths").n("<0 5 12>").room(0.7).gain(0.4)
 
-Vocal chops (French phoneme syllables, great for glitchy/ambient texture):
-- vocalChops — 25 chops (n 0–24): A(0), AIENT(1), AN(2), AR(3), AU(4), MOU(5), OU(6), PA(7), PEU(8), PLU(9), PO(10), PRÉ(11), RY(12), S(13), SION(14), TAIT(15), TE(16), TES(17), TI(18), TOT(19), TRAN(20), TU(21), TUR(22), UN(23), VER(24)
+Vocal samples (great for glitchy/ambient texture):
+- vocal — 35 chops (n 0–34); mix of French phoneme syllables and vocal textures
   Use sparingly — a subtle background element, not a lead. Low gain (0.1–0.25), high room, slow pattern.
-  e.g. s("vocalChops").n("<0 ~ ~ 6 ~ ~ 18 ~>").slow(4).room(0.9).gain(0.15)
+  e.g. s("vocal").n("<0 ~ ~ 6 ~ ~ 18 ~>").slow(4).room(0.9).gain(0.15)
 
 Select variations with .n() — e.g. s("bd").n(2) or s("sd").n("<0 3 5>")
 
 ## AMBIENT SOUNDS
 Pads: note("c3 e3 g3").s("sine").attack(4).release(6).room(0.9)
+Pad sample: s("pad").n("<0 3 7>").slow(2).room(0.95).gain(0.4)
 Drones: note("c2").s("sawtooth").lpf(400).room(0.8).slow(4)
 Texture: note("c4 e4").s("triangle").attack(2).release(4).delay(0.5)
+Synth texture: note("e3 g3").s("synths").n("<2 8 15>").room(0.8).gain(0.35).slow(2)
 Bell texture: s("bell").slow(3).room(0.9).gain(0.4).n(0)
 Sparse perc: s("perc").n("<0 2 4>").slow(2).room(0.7).gain(0.3)
+Vocal texture: s("vocal").n("<0 ~ ~ 6 ~ ~ 18 ~>").slow(4).room(0.9).gain(0.15)
 
 ## TECHNO SOUNDS
 Kick: s("bd*4").n("<0 2>").gain(0.9)
@@ -152,10 +162,10 @@ stack(
 - Use .n() to vary sample variations and keep patterns from sounding static
 - amenBreaks must always use .loopAt() to sync to the current tempo
 - NEVER use note() with .scale() — this causes a runtime error. Always use n() with .scale()
-- Use moog samples often for melodic and textural elements, but synthesized waveforms (sine, sawtooth, triangle) are still encouraged alongside them
+- For melodic leads and textural layers, prefer moog, pad, and synths samples over synthesized waveforms. Synthesized waveforms (sine, sawtooth, triangle) are acceptable but should be secondary — reach for the sample banks first
 - Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
 - High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
 - Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
-- For the FIRST pattern in a conversation (no prior history), keep it simple: 2–3 layers maximum, no more than one rhythmic element, focus on a single mood or texture
+- Keep patterns focused: add or change only a few elements at a time. Never overload a pattern with too many layers at once — build up gradually across prompts
 - NEVER layer a kick drum (bd) and an amenBreak simultaneously — they will clash in the low end. Choose one or the other per pattern
 """

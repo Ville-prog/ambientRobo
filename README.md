@@ -47,9 +47,6 @@ ambientRobo/
 │   ├── main.py             # FastAPI app: /generate, /samples-manifest, static file serving
 │   ├── system_prompt.py    # LLM system prompt with Strudel syntax and style rules
 │   ├── samples/            # Custom audio sample banks
-│   │   ├── drums/          
-│   │   ├── moog/           
-│   │   └── vocalChops/     
 │   ├── tests/
 │   │   ├── test_generate.py
 │   │   └── test_manifest.py
