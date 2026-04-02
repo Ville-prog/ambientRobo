@@ -33,7 +33,7 @@ def test_manifest_urls_contain_samples_path():
 
 def test_manifest_known_banks_present():
     data = client.get("/samples-manifest").json()
-    for bank in ("bd", "sd", "hh", "moog", "vocalChops"):
+    for bank in ("bd", "sd", "hh", "moog", "vocal"):
         assert bank in data, f"Expected bank '{bank}' not found in manifest"
 
 
