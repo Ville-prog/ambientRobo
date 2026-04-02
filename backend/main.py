@@ -41,7 +41,7 @@ app.mount("/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
 
 @app.get("/samples-manifest")
 def samples_manifest(request: Request):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = str(request.base_url).rstrip("/").replace("http://", "https://")
     manifest = {}
 
     for entry in sorted(os.listdir(SAMPLES_DIR)):
