@@ -166,6 +166,8 @@ stack(
 - Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
 - High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
 - Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
-- Keep patterns focused: add or change only a few elements at a time. Never overload a pattern with too many layers at once — build up gradually across prompts
+- When iterating on a previous pattern, add or change at most 1 layer per prompt
+- Use only one drum sound per pattern (e.g. just bd, or just hh, never bd + hh + perc together). Pick the most important one for the mood
+- Drum samples must use a fixed .n() value — never alternate variations with <>. e.g. s("bd").n(2) not s("bd").n("<0 2 4>")
 - NEVER layer a kick drum (bd) and an amenBreak simultaneously — they will clash in the low end. Choose one or the other per pattern
 """
