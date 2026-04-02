@@ -37,7 +37,7 @@ function clearError() {
 async function initAudio() {
   if (strudelReady) return;
   await initStrudel({
-    prebake: () => fetch('/samples-manifest')
+    prebake: () => fetch('https://ambientrobo-production.up.railway.app/samples-manifest')
       .then(r => r.json())
       .then(manifest => samples(manifest))
   });
@@ -68,7 +68,7 @@ form.addEventListener('submit', async (e) => {
   const newHistory = [...history, { role: 'user', content: prompt }];
 
   try {
-    const res = await fetch('/generate', {
+    const res = await fetch('https://ambientrobo-production.up.railway.app/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt, history }),
