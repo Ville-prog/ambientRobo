@@ -14,7 +14,7 @@ Open source under the MIT License.
 
 ## How it works
 
-1. Type s a description into the text field, e.g. `ambient track with harmonizing drones`.
+1. Type a description into the text field, e.g. `ambient track with harmonizing drones`.
 2. The prompt and conversation history are sent to a FastAPI backend.
 3. The backend forwards the request to [Groq](https://groq.com/), a cloud inference service running **Llama 3.3 70B**.
 4. The model returns a pattern written in [Strudel](https://strudel.cc/), a JavaScript live coding DSL for music.
@@ -35,7 +35,8 @@ The conversation is stateful: each new prompt is sent with previous exchanges as
 | Audio engine | Strudel Web (`@strudel/web`) |
 | Visualizer | Canvas 2D, Web Audio API |
 | CI | GitHub Actions (pytest + Jest) |
-| Hosting | Railway (single service) |
+| Backend hosting | Railway |
+| Frontend hosting | Vercel |
 
 ---
 
@@ -44,7 +45,7 @@ The conversation is stateful: each new prompt is sent with previous exchanges as
 ```
 ambientRobo/
 ├── backend/
-│   ├── main.py             # FastAPI app: /generate, /samples-manifest, static file serving
+│   ├── main.py             # FastAPI app: /generate, /samples-manifest
 │   ├── system_prompt.py    # LLM system prompt with Strudel syntax and style rules
 │   ├── samples/            # Custom audio sample banks
 │   ├── tests/
