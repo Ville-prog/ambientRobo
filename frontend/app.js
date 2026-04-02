@@ -85,7 +85,7 @@ form.addEventListener('submit', async (e) => {
     input.value = '';
 
     // Wrap in .analyze(1) so the Web Audio analyser node is wired into the chain
-    const codeWithAnalyser = `(${code}).analyze(1)`;
+    const codeWithAnalyser = `(${code}).gain(0.5).analyze(1)`;
     document.getElementById('tuning-panel').classList.remove('hidden');
 
     try {

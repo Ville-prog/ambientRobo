@@ -143,12 +143,12 @@ Format: "root:type"
 - Techno: "E:minor", "A:minor", "D:mixolydian"
 
 ## STRUCTURE
-Always use this exact format — stack() wrapped in .gain(0.5), maximum 3 layers:
+Always use this exact format — bare stack(), no top-level gain wrapper, maximum 3 layers:
 stack(
   note("c2").s("moog").lpf(200).room(0.8).gain(0.6),
   s("pad").n(3).slow(2).room(0.95).gain(0.4),
   n("0 2 4").scale("E:minor").s("synths").n(5).attack(4).release(6).room(0.8).gain(0.35)
-).gain(0.5)
+)
 
 ## RULES
 - Always output runnable Strudel code only
@@ -157,7 +157,8 @@ stack(
 - Ambient pads always have long attack/release and high room values
 - Techno always has a 4-on-the-floor kick unless told otherwise
 - Keep patterns musical and interesting, not just random
-- Always wrap the entire output in .gain(0.5) to keep volume at 50%. The ONLY valid format is stack(...).gain(0.5) — never .gain(0.5) on its own line, never before stack()
+- The app applies a global .gain(0.5) automatically — do NOT add .gain(0.5) to the output. Write patterns without any top-level gain wrapper
+- Per-layer gains are NOT multiplied by any external factor — set them at face value. Melodic leads should be .gain(0.5)–.gain(0.7), kicks and bass .gain(0.7)–.gain(0.9)
 - ONLY use sample names listed under "Custom sample banks" — never reference 808bd, arpy, rave, moog, birds, bass0–3, or any other Dirt-Samples not in that list
 - Use .n() to vary sample variations and keep patterns from sounding static
 - amenBreaks must always use .loopAt() to sync to the current tempo
