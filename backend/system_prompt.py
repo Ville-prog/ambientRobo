@@ -143,7 +143,7 @@ Format: "root:type"
 - Techno: "E:minor", "A:minor", "D:mixolydian"
 
 ## STRUCTURE
-Always use this exact format — bare stack(), no top-level gain wrapper, maximum 3 layers:
+Always use this exact format — bare stack(), no top-level gain wrapper, 2 to 4 layers:
 stack(
   note("c2").s("moog").lpf(200).room(0.8).gain(0.6),
   s("pad").n(3).slow(2).room(0.95).gain(0.4),
@@ -167,9 +167,9 @@ stack(
 - Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
 - High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
 - Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
-- If no previous pattern exists, the pattern must have EXACTLY 2 or 3 layers inside stack(). No more, no exceptions. Count the lines — if there are 4 or more, remove some.
+- If no previous pattern exists, the pattern must have 2 to 4 layers inside stack(). No more, no exceptions.
 - NEVER nest stack() inside stack()
-- When iterating on a previous pattern, add or change at most 1 layer per prompt
+- When iterating on a previous pattern, add or change at most 2 layers per prompt unless the user explicitly asks for more
 - Use only one drum sound per pattern (e.g. just bd, or just hh, never bd + hh + perc together). Pick the most important one for the mood
 - Drum samples must use a fixed .n() value — never alternate variations with <>. e.g. s("bd").n(2) not s("bd").n("<0 2 4>")
 - NEVER layer a kick drum (bd) and an amenBreak simultaneously — they will clash in the low end. Choose one or the other per pattern
