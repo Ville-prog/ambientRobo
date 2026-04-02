@@ -57,14 +57,6 @@ form.addEventListener('submit', async (e) => {
   const prompt = input.value.trim();
   if (!prompt) return;
 
-  // iOS requires AudioContext.resume() to be called synchronously within the gesture —
-  // before any await. getAudioContext() returns Strudel's shared context, ensuring we
-  // resume the same context that will actually play audio.
-  const audioCtx = getAudioContext();
-  if (audioCtx && audioCtx.state !== 'running') {
-    audioCtx.resume(); // intentionally not awaited — must fire within the gesture chain
-  }
-
   // Initialise Strudel Web Audio engine on first submission
   await initAudio();
 
