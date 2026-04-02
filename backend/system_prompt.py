@@ -166,7 +166,8 @@ stack(
 - Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
 - High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
 - Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
-- Every pattern must have EXACTLY 2 or 3 layers inside stack(). No more, no exceptions. Count the lines — if there are 4 or more, remove some. NEVER nest stack() inside stack()
+- If no previous pattern exists, the pattern must have EXACTLY 2 or 3 layers inside stack(). No more, no exceptions. Count the lines — if there are 4 or more, remove some.
+- NEVER nest stack() inside stack()
 - When iterating on a previous pattern, add or change at most 1 layer per prompt
 - Use only one drum sound per pattern (e.g. just bd, or just hh, never bd + hh + perc together). Pick the most important one for the mood
 - Drum samples must use a fixed .n() value — never alternate variations with <>. e.g. s("bd").n(2) not s("bd").n("<0 2 4>")

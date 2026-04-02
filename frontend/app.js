@@ -15,7 +15,6 @@ const btn = document.getElementById('submit-btn');
 const errorEl = document.getElementById('error');
 
 let strudelReady = false;
-let audioUnlocked = false;
 let history = [];
 
 function showError(msg) {
@@ -30,19 +29,6 @@ function showErrorHTML(html) {
 
 function clearError() {
   errorEl.classList.add('hidden');
-}
-
-async function unlockAudio() {
-  if (audioUnlocked) return;
-  audioUnlocked = true;
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  const ctx = new AudioCtx();
-  const buf = ctx.createBuffer(1, 1, 22050);
-  const src = ctx.createBufferSource();
-  src.buffer = buf;
-  src.connect(ctx.destination);
-  src.start(0);
-  await ctx.resume();
 }
 
 /**
@@ -71,8 +57,13 @@ form.addEventListener('submit', async (e) => {
   const prompt = input.value.trim();
   if (!prompt) return;
 
-  // Unlock AudioContext first (iOS requires this before any async work)
-  await unlockAudio();
+  // iOS requires AudioContext.resume() to be called synchronously within the gesture —
+  // before any await. getAudioContext() returns Strudel's shared context, ensuring we
+  // resume the same context that will actually play audio.
+  const audioCtx = getAudioContext();
+  if (audioCtx && audioCtx.state !== 'running') {
+    audioCtx.resume(); // intentionally not awaited — must fire within the gesture chain
+  }
 
   // Initialise Strudel Web Audio engine on first submission
   await initAudio();
@@ -104,7 +95,13 @@ form.addEventListener('submit', async (e) => {
     // Wrap in .analyze(1) so the Web Audio analyser node is wired into the chain
     const codeWithAnalyser = `(${code}).analyze(1)`;
     document.getElementById('tuning-panel').classList.remove('hidden');
-    evaluate(codeWithAnalyser);
+
+    try {
+      await evaluate(codeWithAnalyser);
+    } catch (evalErr) {
+      showError('The generated pattern had an error and could not play. Try rephrasing your prompt or reloading the page.');
+      return;
+    }
 
     startAudioLogging(); // activates the visualizer (defined in visualizer.js)
     addHistoryEntry(prompt, code);

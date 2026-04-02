@@ -120,6 +120,7 @@ async def generate(request: PromptRequest):
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=messages,
+            temperature=1.2,
         )
     except RateLimitError:
         raise HTTPException(status_code=429, detail="Rate limit reached")
