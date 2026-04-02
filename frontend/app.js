@@ -85,8 +85,9 @@ form.addEventListener('submit', async (e) => {
     input.value = '';
 
     // Resume AudioContext on iOS where it may be suspended after initialisation
-    if (strudel.context && strudel.context.state !== 'running') {
-      await strudel.context.resume();
+    const ctx = getAudioContext();
+    if (ctx.state !== 'running') {
+      await ctx.resume();
     }
 
     // Wrap in .analyze(1) so the Web Audio analyser node is wired into the chain
