@@ -15,6 +15,7 @@ const btn = document.getElementById('submit-btn');
 const errorEl = document.getElementById('error');
 
 let strudelReady = false;
+let audioUnlocked = false;
 let history = [];
 
 function showError(msg) {
@@ -29,6 +30,15 @@ function showErrorHTML(html) {
 
 function clearError() {
   errorEl.classList.add('hidden');
+}
+
+async function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  const ctx = getAudioContext();
+  if (ctx.state !== 'running') {
+    await ctx.resume();
+  }
 }
 
 /**
@@ -57,6 +67,9 @@ form.addEventListener('submit', async (e) => {
   const prompt = input.value.trim();
   if (!prompt) return;
 
+  // Unlock AudioContext first (iOS requires this before any async work)
+  await unlockAudio();
+
   // Initialise Strudel Web Audio engine on first submission
   await initAudio();
 
@@ -83,12 +96,6 @@ form.addEventListener('submit', async (e) => {
     // Commit the LLM reply to history and clear the input
     history = [...newHistory, { role: 'assistant', content: code }];
     input.value = '';
-
-    // Resume AudioContext on iOS where it may be suspended after initialisation
-    const ctx = getAudioContext();
-    if (ctx.state !== 'running') {
-      await ctx.resume();
-    }
 
     // Wrap in .analyze(1) so the Web Audio analyser node is wired into the chain
     const codeWithAnalyser = `(${code}).analyze(1)`;
