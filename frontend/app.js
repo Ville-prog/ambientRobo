@@ -35,10 +35,14 @@ function clearError() {
 async function unlockAudio() {
   if (audioUnlocked) return;
   audioUnlocked = true;
-  const ctx = getAudioContext();
-  if (ctx.state !== 'running') {
-    await ctx.resume();
-  }
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const ctx = new AudioCtx();
+  const buf = ctx.createBuffer(1, 1, 22050);
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.connect(ctx.destination);
+  src.start(0);
+  await ctx.resume();
 }
 
 /**
