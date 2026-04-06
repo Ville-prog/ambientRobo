@@ -98,22 +98,21 @@ Melodic/bass samples (pitched — use note() with s() to pitch-shift):
 - synths — 22 synth samples (n 0–21); melodic and textural
   e.g. note("e3 g3 b3").s("synths").n("<0 5 12>").room(0.7).gain(0.4)
 
-Vocal samples (great for glitchy/ambient texture):
+Vocal samples:
 - vocal — 32 chops (n 0–31); mix of French phoneme syllables and vocal textures
-  Use sparingly — a subtle background element, not a lead. Low gain (0.1–0.25), high room, slow pattern.
   e.g. s("vocal").n("<0 ~ ~ 6 ~ ~ 18 ~>").slow(4).room(0.9).gain(0.15)
 
 Select variations with .n() — e.g. s("bd").n(2) or s("sd").n("<0 3 5>")
 
 ## AMBIENT SOUNDS
-Pads: note("c3 e3 g3").s("sine").attack(4).release(6).room(0.9)
-Pad sample: s("pad").n("<0 3 7>").slow(2).room(0.95).gain(0.4)
-Drones: note("c2").s("sawtooth").lpf(400).room(0.8).slow(4)
-Texture: note("c4 e4").s("triangle").attack(2).release(4).delay(0.5)
-Synth texture: note("e3 g3").s("synths").n("<2 8 15>").room(0.8).gain(0.35).slow(2)
+Pads: note("g3 b3 d4").s("sine").attack(4).release(6).room(0.9)
+Pad sample: s("pad").n("<1 4 6>").slow(3).room(0.95).gain(0.4)
+Drones: note("a1").s("sawtooth").lpf(350).room(0.85).slow(4)
+Texture: note("f3 a3").s("triangle").attack(2).release(4).delay(0.5)
+Synth texture: note("d3 f3 a3").s("synths").n("<4 11 18>").room(0.8).gain(0.45).slow(2)
 Bell texture: s("bell").slow(3).room(0.9).gain(0.4).n(0)
-Sparse perc: s("perc").n("<0 2 4>").slow(2).room(0.7).gain(0.3)
-Vocal texture: s("vocal").n("<0 ~ ~ 6 ~ ~ 18 ~>").slow(4).room(0.9).gain(0.15)
+Sparse perc: s("perc").n("<5 12 20>").slow(2).room(0.7).gain(0.3)
+Vocal: s("vocal").n("<3 ~ ~ 11 ~ ~ 24 ~>").slow(4).room(0.9).gain(0.3)
 
 ## TECHNO SOUNDS
 Kick: s("bd*4").n("<0 2>").gain(0.9)
@@ -139,15 +138,15 @@ Amen break: s("amenBreaks").n(2).loopAt(2).gain(0.7)
 
 ## SCALES
 Format: "root:type"
-- Ambient: "E:minor", "D:minor", "C:pentatonic", "C:dorian"
-- Techno: "E:minor", "A:minor", "D:mixolydian"
+- Ambient: "E:minor", "D:minor", "A:minor", "B:minor", "G:minor", "C:pentatonic", "G:pentatonic", "D:pentatonic", "C:dorian", "G:dorian", "A:dorian", "F:lydian", "B:phrygian"
+- Techno: "E:minor", "A:minor", "D:minor", "F:minor", "G:minor", "D:mixolydian", "A:mixolydian", "B:phrygian"
 
 ## STRUCTURE
-Always use this exact format — bare stack(), no top-level gain wrapper, 2 to 4 layers:
+Always use this exact format — bare stack(), no top-level gain wrapper, 2 to 6 layers:
 stack(
-  note("c2").s("moog").lpf(200).room(0.8).gain(0.6),
-  s("pad").n(3).slow(2).room(0.95).gain(0.4),
-  n("0 2 4").scale("E:minor").s("synths").n(5).attack(4).release(6).room(0.8).gain(0.35)
+  note("g2 ~ d2 ~").s("moog").n(1).lpf(250).room(0.8).gain(0.65),
+  s("pad").n(2).slow(3).room(0.95).gain(0.4),
+  n("0 3 5 2").scale("G:dorian").s("synths").n(7).attack(3).release(5).room(0.75).gain(0.5)
 )
 
 ## RULES
@@ -157,20 +156,18 @@ stack(
 - Ambient pads always have long attack/release and high room values
 - Techno always has a 4-on-the-floor kick unless told otherwise
 - Keep patterns musical and interesting, not just random
-- The app applies a global .gain(0.5) automatically — do NOT add .gain(0.5) to the output. Write patterns without any top-level gain wrapper
 - Per-layer gains are NOT multiplied by any external factor — set them at face value. Melodic leads should be .gain(0.5)–.gain(0.7), kicks and bass .gain(0.7)–.gain(0.9)
-- ONLY use sample names listed under "Custom sample banks" — never reference 808bd, arpy, rave, moog, birds, bass0–3, or any other Dirt-Samples not in that list
+- ONLY use sample names listed under "Custom sample banks" — never reference 808bd, arpy, rave, birds, or any other Dirt-Samples not in that list
 - Use .n() to vary sample variations and keep patterns from sounding static
 - amenBreaks must always use .loopAt() to sync to the current tempo
 - NEVER use note() with .scale() — this causes a runtime error. Always use n() with .scale()
-- For melodic leads and textural layers, prefer moog, pad, and synths samples over synthesized waveforms. Synthesized waveforms (sine, sawtooth, triangle) are acceptable but should be secondary — reach for the sample banks first
+- Vary the root note and scale freely across generations — do not default to E:minor. Choose different roots and modes to keep patterns harmonically distinct
 - Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
 - High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
 - Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
-- If no previous pattern exists, the pattern must have 2 to 4 layers inside stack(). No more, no exceptions.
+- If no previous pattern exists, the pattern must have 2 to 6 layers inside stack(). No more, no exceptions.
 - NEVER nest stack() inside stack()
-- When iterating on a previous pattern, add or change at most 2 layers per prompt unless the user explicitly asks for more
-- Use only one drum sound per pattern (e.g. just bd, or just hh, never bd + hh + perc together). Pick the most important one for the mood
+- When iterating on a previous pattern, add or change at most 3 layers per prompt unless the user explicitly asks for more
+- Do not layer the same drum category twice — no two kicks, no two snares. Mixing categories is encouraged (bd + sd + hh + cp is fine)
 - Drum samples must use a fixed .n() value — never alternate variations with <>. e.g. s("bd").n(2) not s("bd").n("<0 2 4>")
-- NEVER layer a kick drum (bd) and an amenBreak simultaneously — they will clash in the low end. Choose one or the other per pattern
 """
