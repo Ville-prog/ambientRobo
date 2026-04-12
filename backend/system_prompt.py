@@ -96,7 +96,7 @@ Melodic/bass samples (pitched — use note() with s() to pitch-shift):
 - pad    — 7 pad samples (n 0–6); long atmospheric textures, use with slow attack/release
   e.g. s("pad").n("<0 3 6>").slow(2).room(0.9).gain(0.4)
 - synths — 22 synth samples (n 0–21); melodic and textural
-  e.g. note("e3 g3 b3").s("synths").n("<0 5 12>").room(0.7).gain(0.4)
+  e.g. note("<g3 ~ ~ ~ d3 ~ ~ ~>").s("synths").n(8).slow(2).room(0.8).gain(0.4)
 
 Vocal samples:
 - vocal — 32 chops (n 0–31); mix of French phoneme syllables and vocal textures
@@ -109,7 +109,7 @@ Pads: note("g3 b3 d4").s("sine").attack(4).release(6).room(0.9)
 Pad sample: s("pad").n("<1 4 6>").slow(3).room(0.95).gain(0.4)
 Drones: note("a1").s("sawtooth").lpf(350).room(0.85).slow(4)
 Texture: note("f3 a3").s("triangle").attack(2).release(4).delay(0.5)
-Synth texture: note("d3 f3 a3").s("synths").n("<4 11 18>").room(0.8).gain(0.45).slow(2)
+Synth texture: note("<a3 ~ ~ ~ ~ ~ e3 ~>").s("synths").n(14).slow(2).room(0.85).gain(0.4)
 Bell texture: s("bell").slow(3).room(0.9).gain(0.4).n(0)
 Sparse perc: s("perc").n("<5 12 20>").slow(2).room(0.7).gain(0.3)
 Vocal: s("vocal").n("<3 ~ ~ 11 ~ ~ 24 ~>").slow(4).room(0.9).gain(0.3)
@@ -144,9 +144,9 @@ Format: "root:type"
 ## STRUCTURE
 Always use this exact format — bare stack(), no top-level gain wrapper, 2 to 6 layers:
 stack(
-  note("g2 ~ d2 ~").s("moog").n(1).lpf(250).room(0.8).gain(0.65),
+  note("g2 ~ ~ ~ d2 ~ ~ ~").s("moog").n(1).lpf(250).room(0.8).gain(0.65),
   s("pad").n(2).slow(3).room(0.95).gain(0.4),
-  n("0 3 5 2").scale("G:dorian").s("synths").n(7).attack(3).release(5).room(0.75).gain(0.5)
+  note("<a3 ~ ~ ~ ~ ~ f3 ~>").s("synths").n(7).slow(2).room(0.85).gain(0.38)
 )
 
 ## RULES
@@ -162,6 +162,10 @@ stack(
 - amenBreaks must always use .loopAt() to sync to the current tempo
 - NEVER use note() with .scale() — this causes a runtime error. Always use n() with .scale()
 - Vary the root note and scale freely across generations — do not default to E:minor. Choose different roots and modes to keep patterns harmonically distinct
+- Melodic leads must be minimal and sparse: 1–2 notes per phrase with heavy use of rests (~). A lead is a single note floating in space, not an arpeggio. e.g. note("<g3 ~ ~ ~ ~ ~ d3 ~>") not note("g3 a3 b3 d4")
+- Leads should sit quietly under the texture — gain 0.3–0.5. They accent, they do not dominate
+- Never write a lead with more than 3 distinct pitches in a phrase. Fewer is almost always better
+- Leads are optional. If the user's prompt is purely rhythmic or textural, omit any melodic lead entirely
 - Favour bass-heavy mixes: kicks, bass, and low-end elements should sit loud and forward
 - High-end percussive elements (perc, cp, clave, rim, shaker, stick, tb, bell) should be subtle — gain 0.1–0.25 at most
 - Hi-hats and open hats should stay light (gain 0.15–0.35) and never dominate the mix
