@@ -1,8 +1,12 @@
 # ambientRobo
 
-A personal passion project born from a love of ambient and techno music. Describe a sound, a mood, or a feeling in plain text and ambientRobo generates and plays it live in the browser using [Strudel](https://strudel.cc/), a JavaScript live coding language for music.
+[![Live](https://img.shields.io/badge/live-ambientrobo.vercel.app-brightgreen)](https://ambientrobo.vercel.app)
+[![CI](https://github.com/Ville-prog/ambientRobo/actions/workflows/ci.yml/badge.svg)](https://github.com/Ville-prog/ambientRobo/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Open source under the MIT License.
+AmbientRobo turns plain-text descriptions into live music played in the browser. Type `ambient track with harmonizing drones` or `berlin minimal techno`, and within seconds the app generates and plays it using a live-coded [Strudel](https://strudel.cc/) pattern. Built end-to-end: FastAPI backend, Llama 3.3 70B inference hosted on Groq, stateful conversation, automated CI/CD.
+
+Born from a love of ambient and techno music. Open source under the MIT License.
 
 ---
 
@@ -18,7 +22,7 @@ Open source under the MIT License.
 2. The prompt and conversation history are sent to a FastAPI backend.
 3. The backend forwards the request to [Groq](https://groq.com/), a cloud inference service running **Llama 3.3 70B**.
 4. The model returns a pattern written in [Strudel](https://strudel.cc/), a JavaScript live coding DSL for music.
-5. The pattern is evaluated and played directly in the browser via the Strudel Web API.
+5. The pattern is evaluated and played directly in the browser via the Strudel Web API. Unlike most LLM apps that render text, ambientRobo renders sound: the generated code runs live in the browser as audio.
 
 
 The conversation is stateful: each new prompt is sent with previous exchanges as context, so you can iterate on the result with follow-up prompts like `make it slower`, `add more reverb`, or `switch to a minor key`.
