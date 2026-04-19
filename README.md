@@ -4,7 +4,7 @@
 [![CI](https://github.com/Ville-prog/ambientRobo/actions/workflows/ci.yml/badge.svg)](https://github.com/Ville-prog/ambientRobo/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-AmbientRobo turns plain-text descriptions into live music played in the browser. Type `ambient track with harmonizing drones` or `berlin minimal techno`, and within seconds the app generates and plays it using a live-coded [Strudel](https://strudel.cc/) pattern. Built end-to-end: FastAPI backend, Llama 3.3 70B inference hosted on Groq, stateful conversation, automated CI/CD.
+AmbientRobo turns plain-text descriptions into live music played in the browser. Type a promt describing sounds, instruments or a feeling, and within seconds the app generates and plays it using a live-coded [Strudel](https://strudel.cc/) pattern.
 
 Born from a love of ambient and techno music. Open source under the MIT License.
 
