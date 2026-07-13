@@ -20,7 +20,7 @@ Born from a love of ambient and techno music. Open source under the MIT License.
 
 1. Type a description into the text field, e.g. `ambient track with harmonizing drones`.
 2. The prompt and conversation history are sent to a FastAPI backend.
-3. The backend forwards the request to [Groq](https://groq.com/), a cloud inference service running **Llama 3.3 70B**.
+3. The backend forwards the request to [Groq](https://groq.com/), a cloud inference service running **GPT-OSS 120B**.
 4. The model returns a pattern written in [Strudel](https://strudel.cc/), a JavaScript live coding DSL for music.
 5. The pattern is evaluated and played directly in the browser via the Strudel Web API. Unlike most LLM apps that render text, ambientRobo renders sound: the generated code runs live in the browser as audio.
 
@@ -34,7 +34,7 @@ The conversation is stateful: each new prompt is sent with previous exchanges as
 | Layer | Technology |
 |---|---|
 | Backend | Python, FastAPI, Uvicorn |
-| LLM inference | Groq API (Llama 3.3 70B) |
+| LLM inference | Groq API (GPT-OSS 120B) |
 | Frontend | Vanilla JS, HTML, CSS |
 | Audio engine | Strudel Web (`@strudel/web`) |
 | Visualizer | Canvas 2D, Web Audio API |
