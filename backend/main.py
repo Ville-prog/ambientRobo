@@ -92,7 +92,7 @@ class Message(BaseModel):
 class PromptRequest(BaseModel):
     prompt: str
     history: List[Message] = []
-    reasoning_effort: Literal["low", "medium", "high"] = "low"
+    reasoning_effort: Literal["low", "medium"] = "low"
 
 
 @app.get("/health")
