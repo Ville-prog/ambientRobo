@@ -129,6 +129,7 @@ async def generate(request: PromptRequest):
             model="openai/gpt-oss-120b",
             messages=messages,
             temperature=1.2,
+            reasoning_effort="low",
         )
     except RateLimitError:
         raise HTTPException(status_code=429, detail="Rate limit reached")
