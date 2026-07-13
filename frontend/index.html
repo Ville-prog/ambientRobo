@@ -17,7 +17,15 @@
         placeholder="describe a sound..."
         rows="4"
       ></textarea>
-      <button type="submit" id="submit-btn">generate</button>
+      <div class="form-row">
+        <label for="reasoning-select">model effort</label>
+        <select id="reasoning-select">
+          <option value="low" selected>fast</option>
+          <option value="medium">medium</option>
+          <option value="high">high (slower)</option>
+        </select>
+        <button type="submit" id="submit-btn">generate</button>
+      </div>
     </form>
 
     <p id="error" class="error hidden"></p>

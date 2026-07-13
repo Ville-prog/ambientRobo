@@ -13,6 +13,7 @@ const form = document.getElementById('prompt-form');
 const input = document.getElementById('prompt-input');
 const btn = document.getElementById('submit-btn');
 const errorEl = document.getElementById('error');
+const reasoningSelect = document.getElementById('reasoning-select');
 
 let strudelReady = false;
 let history = [];
@@ -71,7 +72,7 @@ form.addEventListener('submit', async (e) => {
     const res = await fetch('https://ambientrobo-production.up.railway.app/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, history }),
+      body: JSON.stringify({ prompt, history, reasoning_effort: reasoningSelect.value }),
     });
     if (res.status === 429) throw new Error('rate_limit');
     if (!res.ok) throw new Error('Request failed');

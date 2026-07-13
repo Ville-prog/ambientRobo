@@ -11,7 +11,7 @@ Author: Ville Laaksoaho
 
 import os
 import re
-from typing import List
+from typing import List, Literal
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
@@ -92,6 +92,7 @@ class Message(BaseModel):
 class PromptRequest(BaseModel):
     prompt: str
     history: List[Message] = []
+    reasoning_effort: Literal["low", "medium", "high"] = "low"
 
 
 @app.get("/health")
@@ -129,7 +130,7 @@ async def generate(request: PromptRequest):
             model="openai/gpt-oss-120b",
             messages=messages,
             temperature=1.2,
-            reasoning_effort="low",
+            reasoning_effort=request.reasoning_effort,
         )
     except RateLimitError:
         raise HTTPException(status_code=429, detail="Rate limit reached")
